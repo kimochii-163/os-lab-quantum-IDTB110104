@@ -1,0 +1,16 @@
+TOC-TOU Race Condition Observations
+====================================
+Run 1: inventory.txt = 70
+Run 2: inventory.txt = 80
+Run 3: inventory.txt = 70
+Run 4: inventory.txt = 90
+Run 5: inventory.txt = 82
+
+Explanation:
+The final inventory value changes every run because the OS scheduler
+decides the order in which background processes execute — and that order
+is non-deterministic. Multiple bots read the same inventory value (the
+"check") before any of them finishes writing the updated value back (the
+"use"), so many subtractions get lost. This is the classic TOC-TOU race
+condition: the state of the resource changes between when it was checked
+and when it was used.
